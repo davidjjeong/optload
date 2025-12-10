@@ -1,8 +1,8 @@
 import { ChatGroq } from "@langchain/groq";
-import { 
-    ChatPromptTemplate,
+import {
     SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate
+    HumanMessagePromptTemplate,
+    ChatPromptTemplate
 } from "@langchain/core/prompts";
 
 // Initialize ChatGroq model
@@ -10,12 +10,12 @@ export const llm = new ChatGroq({
     model: "llama-3.3-70b-versatile",
     temperature: 0,
     apiKey: process.env.GROQ_API_KEY,
-})
+});
 
 // Setup prompt template
 const systemPrompt = SystemMessagePromptTemplate.fromTemplate(
     "You are an expert in cognitive psychology and learning sciences. Analyze assignments and return JSON only."
-)
+);
 const humanPrompt = HumanMessagePromptTemplate.fromTemplate(`
 Assignment Name: {assignment_name}
 
