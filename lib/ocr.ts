@@ -1,25 +1,14 @@
-import Tesseract from "tesseract.js";
-import { PDFParse } from "pdf-parse";
+import { createWorker } from 'tesseract.js';
 
-export async function extractTextFromPDF(buffer: Buffer): Promise<string> {
-    try {
-        const parser = new PDFParse({ data: buffer });
-        const result = await parser.getText();
-        return result.text || "";
-    } catch (err) {
-        console.error("Failed to extract text from PDF: ", err);
-        return "";
-    }
-}
+export async function extractTextFromFile(file: File): Promise<string> {
+    //const buffer = await file.arrayBuffer();
 
-export async function extractTextFromImage(buffer: Buffer): Promise<string> {
-    try {
-        const result = await Tesseract.recognize(buffer, "eng", {
-            logger: (m) => console.log(m)
-        });
+    if(file.type.startsWith("image")) {
+        const worker = await createWorker("eng");
+        const result = await worker.recognize(file);
+        await worker.terminate();
         return result.data.text || "";
-    } catch (err) {
-        console.error("Failed to extract text from image: ", err);
-        return "";
     }
+
+    return await file.text();
 }

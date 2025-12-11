@@ -1,36 +1,24 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { llm, chatPrompt } from "@/lib/langchain";
-import { extractTextFromPDF, extractTextFromImage } from "@/lib/ocr";
+import { NextResponse } from "next/server";
+import { chain } from "@/lib/langchain";
 
-type FileInput = {
-    name: string;
-    type: string;
-    data: string;
-};
-
-export default async function handler(req:NextApiRequest, res:NextApiResponse){
-    if(req.method !== "POST"){
-        return res.status(405).json({ error: "Method not allowed" });
-    }
-
+export async function POST(req: Request){
     try {
-        const files: FileInput[] = req.body.files;
-        const results = [];
+        const { files } = await req.json();
+        const results: unknown[] = [];
 
         for(const file of files) {
-            const buffer = Buffer.from(file.data, "base64");
-            const text = file.type.includes("pdf")
-                ? await extractTextFromPDF(buffer)
-                : await extractTextFromImage(buffer);
+            const text = file.text;
             
             if(!text.trim()) continue;
 
-            const chatPromptValue = await chatPrompt.invoke({
+            const result = await chain.invoke({
                 "assignment_name": file.name,
-                text
+                "text": text,
             });
-
-            const response = await llm.generatePrompt([chatPromptValue]);
+            console.log(result);
+            {/*}
+            const response = await llm.generatePrompt([result]);
+            console.log(response);
             try {
                 let parsed: unknown = null;
 
@@ -45,12 +33,15 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse){
             } catch (err) {
                 console.error("Failed to parse LLM output:", err);
                 continue;
-            }
+            }*/}
         }
         // Return results after processing all files
-        return res.status(200).json({ results });
+        return NextResponse.json({ results }, { status: 200 });
     } catch (err) {
         console.error("Analyze API Error: ", err);
-        return res.status(500).json({ error: "Failed to analyze assignments" })
+        return NextResponse.json(
+            { error: "Failed to analyze assignments" },
+            { status: 500 },
+        );
     }
 }
