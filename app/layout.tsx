@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+// @ts-expect-error: Cannot find module or type declarations for side-effect import of './globals.css'.
 import "./globals.css";
-import { Toaster } from "sonner";
+import LayoutShell from "@/components/LayoutShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,12 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
-      >
-        {children}
-        <Toaster position="bottom-right" richColors />
-      </body>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        >
+          <LayoutShell>
+            {children}
+          </LayoutShell>
+        </body>
     </html>
   );
 }

@@ -43,7 +43,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  const protectedPaths = ["/", "/results", "/api"]; // prevents non-logged in users from accessing user pages
+  const protectedPaths = ["/", "/results"]; // prevents non-logged in users from accessing user pages
   if (!user && protectedPaths.some((path) => pathname.startsWith(path))) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";

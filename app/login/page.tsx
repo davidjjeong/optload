@@ -41,7 +41,9 @@ export default function Login() {
 
         if(!error) {
             if(isLogin){
-                router.push("/");
+                setTimeout(() => {
+                    router.push("/");
+                }, 50);
             } else {
                 setIsLogin(true);
                 toast.success("Account created! Please check your email to verify your account.");
