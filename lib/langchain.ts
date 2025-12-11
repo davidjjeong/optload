@@ -31,14 +31,15 @@ Final Score = 0.5 * Cognitive Load Score + 0.3 * Bloom Level + 0.2 * (ETC_minute
 Then, return JSON only with this structure:
 {{
     "assignment": "{assignment_name}", // MUST match exactly the input assignment_name
-    "concept_complexity": "concept complexity value",
-    "task_difficulty": "task difficulty value",
-    "num_steps": "number of steps required for completion",
-    "prior_knowledge": "prior knowledge value",
-    "cognitive_load_score": "cognitive load score calculated above",
-    "bloom_level": "bloom taxonomy level value",
-    "etc_minutes": "estimated time-to-completion in minutes calculated above",
-    "final_score": "final score calculated above",
+    "description": "keywords that define the assignment", // MUST be three words maximum, be precise as possible
+    "concept_complexity": concept complexity value,
+    "task_difficulty": task difficulty value,
+    "num_steps": number of steps required for completion,
+    "prior_knowledge": prior knowledge value,
+    "cognitive_load_score": cognitive load score calculated above,
+    "bloom_level": bloom taxonomy level value,
+    "etc_minutes": estimated time-to-completion in minutes calculated above,
+    "final_score": final score calculated above,
 }}
 
 Do NOT change the value of "assignment". It must exactly match teh input assignment_name.

@@ -55,8 +55,9 @@ export default function FileUploader({
             />
             <label
                 htmlFor="file-upload"
-                className="border border-dashed w-[350px] p-4 text-center rounded-lg mb-4 
-                flex flex-col items-center justify-center gap-y-2 text-muted-foreground cursor-pointer"
+                className="border border-dashed w-[350px] p-4 text-center rounded-lg mb-4
+                flex flex-col items-center justify-center gap-y-2 text-muted-foreground cursor-pointer
+                "
             >
                 <Upload size={30} />
                 <h1 className="text-chart-1">Upload Task Files</h1>

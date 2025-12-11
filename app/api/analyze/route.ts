@@ -1,39 +1,33 @@
 import { NextResponse } from "next/server";
 import { chain } from "@/lib/langchain";
 
+interface TaskAnalysis {
+    assignment: string;
+    concept_complexity: number;
+    task_difficulty: number;
+    num_steps: number;
+    prior_knowledge: number;
+    cognitive_load_score: number;
+    bloom_level: number;
+    etc_minutes: number;
+    final_score: number;
+}
+
 export async function POST(req: Request){
     try {
         const { files } = await req.json();
-        const results: unknown[] = [];
+        const results: TaskAnalysis[] = [];
 
         for(const file of files) {
             const text = file.text;
             
             if(!text.trim()) continue;
 
-            const result = await chain.invoke({
+            const result = (await chain.invoke({
                 "assignment_name": file.name,
                 "text": text,
-            });
-            console.log(result);
-            {/*}
-            const response = await llm.generatePrompt([result]);
-            console.log(response);
-            try {
-                let parsed: unknown = null;
-
-                // response.llmOutput may be a string, an object, or undefined.
-                if (typeof response.llmOutput === "string") {
-                    parsed = JSON.parse(response.llmOutput);
-                } else if (response.llmOutput && typeof response.llmOutput === "object") {
-                    parsed = response.llmOutput;
-                }
-
-                if (parsed) results.push(parsed);
-            } catch (err) {
-                console.error("Failed to parse LLM output:", err);
-                continue;
-            }*/}
+            })) as TaskAnalysis;
+            results.push(result);
         }
         // Return results after processing all files
         return NextResponse.json({ results }, { status: 200 });
