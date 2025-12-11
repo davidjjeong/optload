@@ -1,5 +1,7 @@
 export default function Results() {
     return(
-        <div></div>
+        <div className="flex flex-col items-center justify-center w-full min-h-screen">
+            
+        </div>
     );
 }

@@ -6,6 +6,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { extractTextFromFile } from "@/lib/ocr";
 import { Send } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Home() {
   const [files, setFiles] = useState<File[]>([]);
@@ -30,6 +31,7 @@ export default function Home() {
 
       const data = await response.json();
       console.log(data.results);
+      toast.success("Analysis complete! Navigate to Results to view.");
     } catch(err) {
       console.error(err);
     } finally {

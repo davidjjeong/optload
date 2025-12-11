@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { chain } from "@/lib/langchain";
+import { createClient } from "@/lib/supabase/server";
 
 interface TaskAnalysis {
     assignment: string;
+    description: string;
     concept_complexity: number;
     task_difficulty: number;
     num_steps: number;
@@ -18,6 +20,13 @@ export async function POST(req: Request){
         const { files } = await req.json();
         const results: TaskAnalysis[] = [];
 
+        const supabase = createClient(); // server-side Supabase client
+        const { data: {user} } = await (await supabase).auth.getUser();
+
+        if(!user) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+        }
+
         for(const file of files) {
             const text = file.text;
             
@@ -29,6 +38,30 @@ export async function POST(req: Request){
             })) as TaskAnalysis;
             results.push(result);
         }
+
+        const supabaseResults = results.map(r => ({
+            user_id: user.id,
+            assignment: r.assignment,
+            description: r.description,
+            concept_complexity: r.concept_complexity,
+            task_difficulty: r.task_difficulty,
+            num_steps: r.num_steps,
+            prior_knowledge: r.prior_knowledge,
+            cognitive_load_score: r.cognitive_load_score,
+            bloom_level: r.bloom_level,
+            etc_minutes: r.etc_minutes,
+            final_score: r.final_score,
+        }));
+
+        const { error: insertError } = await (await supabase)
+            .from("assignment_analysis")
+            .insert(supabaseResults);
+        
+        if(insertError) {
+            console.error("Supabase Insert Error: ", insertError);
+            return NextResponse.json({ error: "Failed to store analysis" }, { status: 500 });
+        }
+
         // Return results after processing all files
         return NextResponse.json({ results }, { status: 200 });
     } catch (err) {
