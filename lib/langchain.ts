@@ -8,7 +8,7 @@ import { JsonOutputParser } from "@langchain/core/output_parsers";
 
 // Initialize ChatGroq model
 const llm = new ChatGroq({
-    model: "llama-3.3-70b-versatile",
+    model: "openai/gpt-oss-120b",
     temperature: 0,
     apiKey: process.env.GROQ_API_KEY,
 });

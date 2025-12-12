@@ -39,7 +39,7 @@ export async function POST(req: Request){
             files.map(async (file: inputFile) => {
                 const result = await chain.invoke({
                     "assignment_name": file.name,
-                    "text": file.text,
+                    "text": file.text
                 }) as TaskAnalysis;
 
                 return result;
