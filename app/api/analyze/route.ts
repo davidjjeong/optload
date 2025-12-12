@@ -15,10 +15,16 @@ interface TaskAnalysis {
     final_score: number;
 }
 
+interface inputFile {
+    name: string;
+    type: string;
+    text: string;
+}
+
 export async function POST(req: Request){
     try {
         const { files } = await req.json();
-        const results: TaskAnalysis[] = [];
+        //const results: TaskAnalysis[] = [];
 
         const supabase = await createClient(); // server-side Supabase client
         const { data: {user} } = await supabase.auth.getUser();
@@ -27,6 +33,19 @@ export async function POST(req: Request){
             return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
         }
 
+        const start = performance.now();
+        
+        const results = await Promise.all(
+            files.map(async (file: inputFile) => {
+                const result = await chain.invoke({
+                    "assignment_name": file.name,
+                    "text": file.text,
+                }) as TaskAnalysis;
+
+                return result;
+            })
+        );
+        /*
         for(const file of files) {
             const text = file.text;
             
@@ -37,7 +56,9 @@ export async function POST(req: Request){
                 "text": text,
             }) as TaskAnalysis;
             results.push(result);
-        }
+        }*/
+        const end = performance.now();
+        console.log(`Total batch latency: ${(end - start).toFixed(2)} ms`);
 
         const supabaseResults = results.map((r, index)=> ({
             user_id: user.id,

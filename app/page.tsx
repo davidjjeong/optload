@@ -20,9 +20,8 @@ export default function Home() {
           name: `Task ${index + 1}`, // Each file named Task 1-5
           type: file.type,
           text: await extractTextFromFile(file),
-        }))
-      );
-
+      })));
+      
       const response = await fetch("api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -31,6 +30,7 @@ export default function Home() {
 
       const data = await response.json();
       console.log(data.results);
+      setFiles([]); // reset files
       toast.success("Analysis complete! Navigate to Results to view.");
     } catch(err) {
       console.error(err);
@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen">
       <div className="lg:w-[800px] md:w-[700px] sm:w-[500px] w-[400px] mb-4">
-        <FileUploader onFilesChange={setFiles} />
+        <FileUploader onFilesChange={setFiles} files={files} />
       </div>
       {files.length > 0 && (loading ? (
         <Button 

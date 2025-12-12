@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import { formatFileSize } from "@/lib/utils";
 import { FileText, Image, Trash2, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface UploadProps {
+    files: File[]; // files from parent (page.tsx)
     onFilesChange: (files: File[]) => void;
 };
 
@@ -14,30 +15,27 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 const MAX_FILES = 5;
 
 export default function FileUploader({
+    files,
     onFilesChange
 }: UploadProps){
-    const [files, setFiles] = useState<File[]>([]);
 
     const handleFileSelect = useCallback((incoming: FileList | File[]) => {
         const newFiles = Array.from(incoming);
 
-        if(files.length >= MAX_FILES) { // reject if max files exceeded
+        if(files.length + newFiles.length > MAX_FILES) { // reject if max files exceeded
             alert(`You can only upload up to ${MAX_FILES} files`);
             return;
         }
-        if(incoming[incoming.length - 1].size > MAX_FILE_SIZE){ // check if max file size exceeded
-            alert(`Uploaded file exceeded maximum file size`);
+        if(newFiles.some(f => f.size > MAX_FILE_SIZE)){ // check if max file size exceeded
+            alert(`One or more files exceeded maximum file size`);
             return;
         }
         const combined = [...files, ...newFiles];
-
-        setFiles(combined);
         onFilesChange(combined);
     }, [files, onFilesChange]);
 
     const removeFile = (index: number) => {
         const updated = files.filter((_, i) => i !== index);
-        setFiles(updated);
         onFilesChange(updated);
     };
 

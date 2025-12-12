@@ -32,9 +32,7 @@ Follow these rules STRICTLY when estimating number of steps required and estimat
 
 Based on these values, compute:
 Cognitive Load Score = 0.4 * Concept Complexity + 0.3 * Task Difficulty + 0.2 * (Steps / 10) + 0.1 * Prior Knowledge
-Final Score = 0.5 * Cognitive Load Score + 0.3 * Bloom Level + 0.2 * (ETC_minutes / 30)
-
-Scale final score to be out of 100.
+Final Score = 0.5 * Cognitive Load Score + 0.3 * (Bloom Level * 10 / 6) + 0.2 * (ETC_minutes / 30) * (10 / 336)
 
 Then, return JSON only with this structure:
 {{
