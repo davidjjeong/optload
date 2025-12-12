@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-// @ts-expect-error: Cannot find module or type declarations for side-effect import of './globals.css'.
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import LayoutShell from "@/components/LayoutShell";
 
@@ -11,6 +10,12 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
 });
 
@@ -27,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+          className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} font-sans antialiased dark`}
         >
           <LayoutShell>
             {children}

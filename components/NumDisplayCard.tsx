@@ -17,7 +17,7 @@ export function NumDisplayCard({
         <Card>
             <CardHeader>
                 <CardDescription><Icon size={48} /></CardDescription>
-                <CardTitle className="text-5xl font-bold">{display_value}</CardTitle>
+                <CardTitle className="text-4xl font-bold">{display_value}</CardTitle>
             </CardHeader>
             <CardFooter>
                 <span className="font-light">{label}</span>
