@@ -1,36 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OptLoad - Optimize Your Cognitive Load
+OptLoad is a web application built with NEXT.js, LangChain, and Supabase designed to provide users a precise, accurate comparison of task load given a set of tasks that a user needs to complete. OptLoad is meant to provide a big picture of task difficulty and effort needed to complete each task, so that the user can plan and prepare better for task completion based on the results from the application.
 
-## Getting Started
+Currently, OptLoad has two main features:
+- Home: User can upload up to 5 task files (supports image only for now), each file capped at a maximum size of 50 MB. Once the files are uploaded, the user can hit the "Optimize" button, which will query a chat prompt to openai/gpt-oss-120b model through LangChain and Groq API.
+- Results: User can view the latest task load analysis. This section displays a clean, intuitive dashboard of overall task and cognitive load scores, estimated hours to complete all tasks, etc. Even after the user signs out, the task analysis will be saved in a database hosted by Supabase, so the user can log back in next time to view his/her last task analysis.
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## TODO
+- Deploy current beta version to Vercel
+- Add new features (**Customize**: Allows users to customize the settings of the GPT model used for task analysis. **Plan**: Helps the user plan the "what" and "how" for task completion based on the analysis in the Results section.)
