@@ -45,7 +45,7 @@ export default function FileUploader({
                 id="file-upload"
                 type="file"
                 multiple
-                accept="application/pdf, image/*"
+                accept="image/*"
                 onChange={(e) => {
                     if (e.target.files) handleFileSelect(e.target.files);
                 }}
