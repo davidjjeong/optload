@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import LayoutShell from "@/components/LayoutShell";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeSwitcherBtn } from "@/components/ThemeSwitcherBtn";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +34,19 @@ export default function RootLayout({
   return (
     <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} font-sans antialiased dark`}
+          className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} font-sans antialiased`}
         >
-          <LayoutShell>
-            {children}
-          </LayoutShell>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="fixed top-4 right-4"><ThemeSwitcherBtn /></div>
+            <LayoutShell>
+              {children}
+            </LayoutShell>
+          </ThemeProvider>
         </body>
     </html>
   );
