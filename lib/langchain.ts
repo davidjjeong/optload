@@ -19,14 +19,22 @@ const systemPrompt = SystemMessagePromptTemplate.fromTemplate(
 Analyze the text of the assignment and compute these values:
 - Concept Complexity (ranked from 1 to 10)
 - Task Difficulty (ranked from 1 to 10)
-- Number of Steps Required for Completion
+- Number of Steps Required for Completion (maximum 100)
 - Prior Knowledge Required (ranked from 1 to 10)
 - Bloom Taxonomy Level (ranked from 1 to 6)
-- Estimated Time-to-Completion in minutes
+- Estimated Time-to-Completion in minutes (maximum 10080 minutes, i.e. 7 days)
+
+Follow these rules STRICTLY when estimating number of steps required and estimated time-to-completion:
+- Break the task into subtasks explicitly (each subtask = one step)
+- Calculate as accurately as possible how much time each subtask would take
+- Sum up the time to compute the estimated time-to-completion in minutes
+(You are an expert in time estimation.)
 
 Based on these values, compute:
 Cognitive Load Score = 0.4 * Concept Complexity + 0.3 * Task Difficulty + 0.2 * (Steps / 10) + 0.1 * Prior Knowledge
 Final Score = 0.5 * Cognitive Load Score + 0.3 * Bloom Level + 0.2 * (ETC_minutes / 30)
+
+Scale final score to be out of 100.
 
 Then, return JSON only with this structure:
 {{

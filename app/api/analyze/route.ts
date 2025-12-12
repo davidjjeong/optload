@@ -20,8 +20,8 @@ export async function POST(req: Request){
         const { files } = await req.json();
         const results: TaskAnalysis[] = [];
 
-        const supabase = createClient(); // server-side Supabase client
-        const { data: {user} } = await (await supabase).auth.getUser();
+        const supabase = await createClient(); // server-side Supabase client
+        const { data: {user} } = await supabase.auth.getUser();
 
         if(!user) {
             return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
@@ -32,16 +32,16 @@ export async function POST(req: Request){
             
             if(!text.trim()) continue;
 
-            const result = (await chain.invoke({
+            const result = await chain.invoke({
                 "assignment_name": file.name,
                 "text": text,
-            })) as TaskAnalysis;
+            }) as TaskAnalysis;
             results.push(result);
         }
 
-        const supabaseResults = results.map(r => ({
+        const supabaseResults = results.map((r, index)=> ({
             user_id: user.id,
-            assignment: r.assignment,
+            assignment: `Task ${index + 1}`,
             description: r.description,
             concept_complexity: r.concept_complexity,
             task_difficulty: r.task_difficulty,
@@ -53,7 +53,7 @@ export async function POST(req: Request){
             final_score: r.final_score,
         }));
 
-        const { error: insertError } = await (await supabase)
+        const { error: insertError } = await supabase
             .from("assignment_analysis")
             .insert(supabaseResults);
         

@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, XAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 
@@ -23,8 +23,10 @@ export function BarChartCard({
     chartDescription,
     chartData,
 } : BarChartProps) {
+    const maxScore = Math.max(...chartData.map(d => d.score));
+
     return(
-        <Card>
+        <Card className="h-fit">
             <CardHeader>
                 <CardTitle>{chartTitle}</CardTitle>
                 <CardDescription>{chartDescription}</CardDescription>
@@ -32,7 +34,7 @@ export function BarChartCard({
             <CardContent>
                 <ChartContainer config={chartConfig}>
                     <BarChart accessibilityLayer data={chartData}>
-                        <CartesianGrid vertical={false} />
+                        <CartesianGrid vertical={false} horizontal={false} />
                         <XAxis
                             dataKey="task"
                             tickLine={false}
@@ -44,7 +46,11 @@ export function BarChartCard({
                             cursor={false}
                             content={<ChartTooltipContent hideLabel />}
                         />
-                        <Bar dataKey="score" fill="var(--color-score)" radius={8} />
+                        <Bar dataKey="score" radius={8}>
+                            {chartData.map((entry, i) => (
+                                <Cell key={i} fill={entry.score === maxScore ? "var(--chart-1)" : "var(--muted"} />
+                            ))}
+                        </Bar>
                     </BarChart>
                 </ChartContainer>
             </CardContent>
